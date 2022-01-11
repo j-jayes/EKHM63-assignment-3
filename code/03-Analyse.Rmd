@@ -4,3 +4,158 @@ author: "JJayes"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: html_document
 ---
+
+```{r}
+library(tidyverse)
+theme_set(theme_light())
+library(sf)
+```
+
+```{r}
+df <- read_rds(here::here("data", "roses-wolf", "data.rds"))
+df_country <- read_rds(here::here("data", "roses-wolf", "data_country.rds"))
+map_simple <- read_rds(here::here("data", "roses-wolf", "map_simple.rds"))
+```
+
+## Regional GDP
+
+```{r}
+library(gghighlight)
+
+df %>% 
+  filter(series == "Regional GDP (1990 $m)",
+         country_current_borders == "Italy") %>% 
+  ggplot(aes(year, value, colour = region)) +
+  geom_point() +
+  geom_line() +
+  gghighlight(region %in% c("Calabria", "Lombardia")) +
+  scale_y_continuous(labels = scales::dollar_format()) +
+  scale_colour_brewer(palette = "Dark2") +
+  labs(x = NULL,
+       y = "Regional GDP (1990 $m)")
+```
+
+## Regional GDP per capita
+
+```{r}
+jpeg(here::here("figures", "regional_gdp_per_capita__line.jpeg"), width = 8, height = 6, units = "in", res = 1000)
+
+df %>%
+  filter(
+    series %in% c("Population", "Regional GDP (1990 $m)"),
+    country_current_borders == "Italy"
+  ) %>%
+  pivot_wider(names_from = series) %>%
+  janitor::clean_names() %>%
+  mutate(regional_gdp_per_capita = regional_gdp_1990_m / population * 1000000) %>%
+  pivot_longer(c(regional_gdp_per_capita, population, regional_gdp_1990_m)) %>%
+  filter(name == "regional_gdp_per_capita") %>%
+  ggplot(aes(year, value, colour = region)) +
+  geom_point() +
+  geom_line() +
+  gghighlight(region %in% c("Calabria", "Lombardia")) +
+  scale_y_continuous(labels = scales::dollar_format()) +
+  scale_colour_brewer(palette = "Dark2") +
+  labs(
+    x = NULL,
+    y = "Regional GDP per capita (1990 $)"
+  )
+
+dev.off()
+```
+
+
+Map 
+```{r}
+df %>%
+  filter(
+    series %in% c("Population", "Regional GDP (1990 $m)"),
+    country_current_borders == "Italy"
+  ) %>%
+  pivot_wider(names_from = series) %>%
+  janitor::clean_names() %>%
+  mutate(regional_gdp_per_capita = regional_gdp_1990_m / population * 1000000) %>%
+  pivot_longer(c(regional_gdp_per_capita, population, regional_gdp_1990_m)) %>%
+  filter(name == "regional_gdp_per_capita",
+         year %in% c(1900, 1938, 1980, 2000)) %>% 
+  inner_join(map_simple) %>% 
+  ggplot(aes(geometry = geometry, fill = value)) +
+  geom_sf() +
+  facet_wrap(~ year) +
+  theme_void() +
+  scale_fill_gradient2(low = "blue", high = "red", midpoint = 30, labels = scales::percent_format(scale = 1)) +
+  # scale_fill_continuous() +
+  labs(fill = "Manufacturing employment")
+```
+
+## Sectoral Employment Shares
+
+```{r}
+df %>% 
+  filter(series %in% c("Agric. share of employment",
+                     "Industry share of employment",
+                     "Services share of employment"),
+         country_current_borders == "Italy") %>% 
+  group_by(year, series) %>% 
+  mutate(value = mean(value)) %>% 
+  ungroup() %>% 
+  distinct(series, year, value, .keep_all = T) %>% 
+  mutate(region = "Italian Average") %>% 
+  bind_rows(df %>% 
+  filter(series %in% c("Agric. share of employment",
+                     "Industry share of employment",
+                     "Services share of employment"),
+         region %in% c("Calabria", "Lombardia"))) %>% 
+  ggplot(aes(year, value, fill = series)) +
+  geom_area(position = "fill") +
+  scale_y_continuous(labels = scales::percent_format()) +
+  scale_fill_brewer(palette = "Spectral") +
+  facet_wrap(~ region) +
+  theme(legend.position = "bottom") +
+  labs(x = NULL,
+       y = "Sectoral share of employment",
+       fill = NULL)
+```
+
+
+## Industry employment share
+
+```{r}
+
+df %>%
+  filter(
+    series == "Industry share of employment",
+    country_current_borders == "Italy",
+    year %in% c(1900, 1938, 1980, 2015)
+  ) %>%
+  mutate(name = case_when(
+    region == "Lombardia" ~ "Lombardia",
+    region == "Calabria" ~ "Calabria",
+    TRUE ~ ""
+  )) %>%
+  inner_join(map_simple) %>%
+  ggplot(aes(geometry = geometry, fill = value)) +
+  geom_sf() +
+  geom_sf_text(aes(label = name)) +
+  facet_wrap(~year) +
+  theme(
+    panel.grid = element_blank(),
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    legend.position = "bottom"
+  ) +
+  guides(fill = guide_colorbar(barwidth = 15, barheight = .5, title.position = "top", title.hjust = .5)) +
+  scale_fill_gradient2(low = "midnightblue", high = "red", mid = "pink", midpoint = 30, labels = scales::percent_format(scale = 1)) +
+  labs(
+    fill = "Share of employment in manufacturing",
+    x = NULL,
+    y = NULL
+  )
+
+
+```
+
+```{r}
+df %>% distinct(series)
+```
+

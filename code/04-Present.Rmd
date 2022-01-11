@@ -1,6 +1,6 @@
 ---
-title: "Present"
-author: "JJayes"
+title: "EKHM63: Growth over Space and Time: Assignment 3"
+author: "Jonathan Jayes"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
     bookdown::html_document2:
@@ -23,4 +23,70 @@ knit: (function(input, ...) {
 knitr::opts_chunk$set(echo = FALSE, message = F, warning = F, fig.align = "center")
 ```
 
-Test
+# Regional Development in Italy: the North South Divide and the case of Calabria
+
+## Introduction
+
+Diversification and the movement of labour out of agriculture and into high productivity manufacturing has been seen as an essential tool to raise productivity in a region and hence improving regional GDP. In Italy, regional inequalities have been exacerbated by a rise of manufacturing in the North and a lagging behind in terms of productivity in the South.
+
+This essay examines the way in which Calabria in Southern Italy has failed to keep pace with aggregate growth in the country through the lens of evolutionary economic geography; focussing on the timing of the adoption of general purpose technologies, the space along which comparative advantages were generated, the pace of structural change and the kinds of spillovers affecting the region. The essay concludes by outlining a tool created to analyse these kinds of regional differentiations in Europe using data from the [Rosés-Wolf database on regional GDP](https://www.wiwi.hu-berlin.de/de/professuren/vwl/wg/roses-wolf-database-on-regional-gdp). 
+
+## Context
+
+```{r}
+knitr::include_graphics(here::here("figures", "regional_gdp_per_capita__line.jpeg"))
+```
+
+
+I should really have a look at the lectures to inform me about the important things in the second half of the course:
+
+What does the context say? 
+
+4 pillars - Time, Space, Structural Change, Efficiency.
+
+Time:
+what is technologically possible in historical context.
+Show what is available in terms of technology adoption in Italy versus rest of Europe with that dataset I had on technology adoption. Mail, Electricity, Steam, ICT.
+
+Space: 
+Where is it possible at different points in time:
+regions are not isolated - 
+
+Show maps of shift out of agriculture over time. Maybe 4 panels looking at Europe.
+
+Structural Change:
+industrial restructuring as a result of various pressures.
+
+Reallocation of opportunities across local industries. 
+
+Need to focus on micro level phenomena rather than macro-level. Understand the industry dynamics. Look at evolutionary economic geography - what does space matter?
+
+I should speak also about the kinds of industries that are successful in Calabria. What are the kinds of spillovers - there are those 3 right?
+
+### Regional inequality on the rise in Italy?
+
+Look at North vs South line or map over time?
+
+## Other information
+
+Financial Times article:
+
+(https://www.ft.com/content/55cb175d-9a0a-4c05-b358-ca39fa365ceb)
+
+"The worst affected are those living in the country’s south, in particular the most vulnerable, those living on the outskirts of cities and in rural areas and those engaged in Italy’s vast informal and undocumented economy" 
+
+## Crux
+
+Problem - wage setting determined by the North but lower marginal productivity means that the unemployment rate is higher in the South - see Enrico Moretti on this.
+
+# Tool for visualizing the Roses and Wolf database on Regional Development in Europe.
+
+I have built a tool to visualize the data that I made use of in this essay - as well as a bunch more. It is an interactive web app [available here](https://jonathan-jayes.shinyapps.io/Roses-Wolf-database-on-regional-GDP/).
+
+It looks like this: 
+
+```{r}
+knitr::include_graphics(here::here("images", "roses-wolf-tool.PNG"))
+```
+
+You can see a stacked column chart depicting the sectoral shares of employment, a line chart of regional GDP and regional population compared to the national level, as well as a map that gives context on sectoral shares of employment in the surrounding regions.
