@@ -12,7 +12,8 @@ bibliography: bibliography.bib
 output:
   pagedown::html_paged: 
     toc: true
-    number_sections: false
+    number_sections: true
+links-to-footnotes: true
 # This section will knit your Rmarkdown file to the root directory to easily deploy to Github Pages
 knit: (function(input, ...) {
     rmarkdown::render(
@@ -45,6 +46,68 @@ Calabria is a region on the Southern tip of Italy's boot, rich in history and fe
 knitr::include_graphics(here::here("figures", "tourism__col.jpeg"))
 ```
 
+## Economic growth patterns in Calabria 1900-2015
+
+### Pillar one: time
+
+The first pillar of the evolutionary economic geography framework asks what is possible given the historical context and the time in which development takes place. I begin by examining the evolution of regional GDP in Italy.
+
+Calabria evidences the stark North-South divide in Italy, with the lowest regional GDP per capita of the 20 NUTS2 regions in Italy. in 2015, the latest year in the Roses and Wolf dataset, the magnitude of regional GDP per capita in Calabria is half of that of Lombardia, whose capital is Milan.
+
+```{r, fig.cap="Regional GDP per capita in Italy 1900-2015 highlighting Calabria and Lombardia. Source: Roses and Wolf database on Regional Development in Europe"}
+knitr::include_graphics(here::here("figures", "regional_gdp_per_capita__line.jpeg"))
+```
+
+This is due in part to it's sectoral employment share. In contrast to Lombardia in the North, Calabria has a relatively high share of employment in the agricultural sector since 1900, and the labour force has not shifted into industry as has been done in the North. One reason for this is the natural comparative advantage that the Southern region has in agriculture, given its Mediterranean climate which is more suitable to the cultivation of crops that require sunlight and detest frost, a feature which I touch on in the second pillar, space.
+
+In the figure below we can see that the yellow sliver of the stacked area chart for Calabria is narrow, and expands only modestly since 1950. In contrast, the industry share of employment in Lombardia is wide, displacing agriculture (orange) to a large extent since 1900 such that by 2015, there is almost no agricultural employment in the Northern region. The picture for Italy as a whole is between these two extremes, and the services share of employment is remarkably similar across the three regions depicted.
+
+```{r, fig.cap="Sectoral employment shares in Italy 1900-2015 highlighting Calabria, Lombardia and Italy as a whole. Source: Roses and Wolf database on Regional Development in Europe"}
+knitr::include_graphics(here::here("figures", "sectoral_employment_shares__stacked_area.jpeg"))
+```
+
+Calabria also sees some of the highest rates of unemployment in Italy, with Eurostat data evidencing a rate of unemployment above 20 percent since 2012 in the region. The level of unemployment is more than double the national average (shown in orange) and four times that of Lombardia (shown in purple) in 2020.
+
+```{r, fig.cap="Unemployment by region in Italy highlighting Calabria, Lombaria and Italy on aggregate. Source: Eurostat"}
+knitr::include_graphics(here::here("figures", "unemployment_region__line.jpeg"))
+```
+
+The first pillar asks what is technologically possible given the technologies available at the time. While geographically disaggregated data on technology adoption was difficult to source, we can look at the kinds of general purpose technologies adopted in Italy as a whole, compared to other OECD nations. This may inform the distinction created between North and South in terms of the dynamics of innovation.
+
+The figure below depicts the historical adoption of different kinds of general purpose technologies over different time periods, weighted by the population in each time period. Italy is highlighted in dark green while the United Kingdom's path is shown in orange for context. The grey lines are all other OECD nations. It is evident that in the important categories energy output and early communication technologies (mail and newspaper circulation), Italy falls in the bottom quartile of all OECD nations. This relative insufficiency in early communication technologies may have contributed in part to the fragmented nature of innovation that @leydesdorff_regions_2021 argues splits the North and South in Italy, and is returned to later. However, contemporary communication technologies of the digital age like mobile phones and personal computers present a more mixed picture. Despite a late take-off, the number of mobile phones per person in Italy in 2000 is higher than comparator the United Kingdom, and outperforms the majority of OECD comparators. While personal computers per capita in Italy lag behind other OECD nations, towards the end of the period there is a sharp increase signalling a potential catch-up.
+
+```{r, fig.cap="Historical adoption of technologies highlighting Italy and the United Kingdom. Source: Historical Cross-Country Technology Adoption (HCCTA) Dataset from Diego A. Comin and Bart Hobijin"}
+knitr::include_graphics(here::here("images", "italy_six_technologies.jpeg"))
+```
+
+### Pillar two: space
+
+The second pillar asks us to evaluate the spatial dynamics at play in the regional growth path of a particular region. As noted above, the Mediterranean climate in Southern Italy and Calabria is well suited to agriculture. In the map below I show the evolution of the share of employment in Agriculture across Europe. It is clear that Southern Europe, specifically Portugal, Spain and Italy, retain higher shares of employment in agriculture while the remainder of the continent becomes more purple over time, signifying a shift out of employment in agriculture. In this way, the spatial dynamics of Calabria dictate that following it's comparative advantage in agriculture, it should specialize in agriculture and trade with other regions better suited to industrial specialization. 
+
+```{r, fig.cap= "Evolution of employment share in agriculture aross Europe, 1900-2015. Source: Roses and Wolf database on Regional Development in Europe"}
+knitr::include_graphics(here::here("figures", "agric_employment_share__map_europe.jpeg"))
+```
+
+In terms of knowledge spillovers, the spatial impact of Calabria's geography and neighbouring regions is important. In order to share knowledge between firms in a common industry, *a la* Marhsall-Arrow-Romer (MAR) spillovers, the closer firms in a similar industry are together, the greater the knowledge spillovers [@simmie_knowledge_2002]. The map below depicts the share of employment in manufacturing within Italy only from 1900 to 2015. What is evident is that in the North, the manufacturing hub is focussed around Lombardia, with neighbouring regions in the North also having relatively higher shares of employment in manufacturing, with the peak manufacturing employment in 1980. In contrast, the regions around Calabria see some of the lowest manufacturing employment levels. Hence it is not feasible for firms in Calabria who wish to transition to manufacturing to benefit from the MAR spillovers whereby workers share knowledge between firms and advance the common know-how in a region. In the future, Calabria would not benefit from attempting to transition into manufacturing, as we can see in the map also that in Lombardia, peak manufacturing has passed, with declining shares of employment in manufacturing in 2015 compared to 1980.
+
+```{r, fig.cap= "Evolution of employment share in manufacturing within Italy, 1900-2015. Source: Roses and Wolf database on Regional Development in Europe"}
+knitr::include_graphics(here::here("figures", "industry_employment_share__map.jpeg"))
+```
+
+### Pillar three: structural change
+
+The most interesting idea that I came across when doing this assignment related to the collective wage bargaining agreements within industry and the distributional consequences that these have for Italy. As we have seen in the previous sections, the South in general and Calabria specifically see higher rates of unemployment and lower regional GDP per capita than the North (and in our case highlighting Lombardia). Yet, collective wage bargaining councils set wages for the entire country within an occupation, and there is little flexibility for employers to adjust these nominal wages for the cost of living in a region or the marginal productivity of labour within a region. @boeri_wage_2019 argue that this feature maintains the divide between North and South.
+
+In short, the argument is that in Italy, there is "almost no relationship between local productivity and nominal wages" and that as a consequence, geographical imbalances are created [@boeri_wage_2019]. In the North, where the cost of housing is higher, real wages are lower, as are unemployment rates. In the South, because nominal wages are identical to the North, and cost of housing (the largest component of cost of living) is lower, real wages and purchasing power is higher. The authors argue that this creates a queueing effect for jobs in the South - young people live with their family for a longer time than in the North in the hope of landing a relatively high real wage job. 
+
+
+
+```{r, fig.cap= "Evolution of population growth rates in Italy highlighting Calabria and Lombardia, 1900-2015. Source: Roses and Wolf database on Regional Development in Europe"}
+knitr::include_graphics(here::here("figures", "population_growth__line.jpeg"))
+```
+
+
+## Innovation investment and economic organization in Calabria
 
 @leydesdorff_regions_2021 notes that in 2001, Italy moved to give regions more autonomy in managing their health, education, economic and industrial development. As a result, funding for innovation and R&D was sharply reduced in the South [@leydesdorff_regions_2021]. Further, @leydesdorff_regions_2021 argues that when applying the innovation-systemness lens and the triple helix system to Italy, it is best conceptualized as two distinct regions - the North and South, rather than 20 administrative regions, concluding that different innovation strategies could be developed for the two parts of the country.
 
@@ -56,98 +119,21 @@ With regard to the kinds of spillovers that are possible,
 
 Future trends: due to the macro-economic situation in Southern Europe, the support for regional subsidies to rural areas has decreased - Calabria will be forced to make its economic turn around on its own steam - the North and the European Union will not have sufficient knowledge and capability to drive this change [@gonzalez_northsouth_2011]. 
 
+## Policy brief
 
-```{r}
-knitr::include_graphics(here::here("figures", "regional_gdp_per_capita__line.jpeg"))
-```
-
-
-I should really have a look at the lectures to inform me about the important things in the second half of the course:
-
-What does the context say? 
-
-4 pillars - Time, Space, Structural Change, Efficiency.
-
-Time:
-what is technologically possible in historical context.
-Show what is available in terms of technology adoption in Italy versus rest of Europe with that dataset I had on technology adoption. Mail, Electricity, Steam, ICT.
-
-```{r, fig.cap="Historical adoption of technologies highlighting Italy and the United Kingdom. Source: Historical Cross-Country Technology Adoption (HCCTA) Dataset from Diego A. Comin and Bart Hobijin"}
-knitr::include_graphics(here::here("images", "italy_six_technologies.jpeg"))
-```
-
-
-Space: 
-Where is it possible at different points in time:
-regions are not isolated - 
-
-Show maps of shift out of agriculture over time. Maybe 4 panels looking at Europe.
-
-```{r}
-knitr::include_graphics(here::here("figures", "agric_employment_share__map_europe.jpeg"))
-
-```
-
-
-Structural Change:
-industrial restructuring as a result of various pressures.
-
-Reallocation of opportunities across local industries. 
-
-Need to focus on micro level phenomena rather than macro-level. Understand the industry dynamics. Look at evolutionary economic geography - what does space matter?
-
-I should speak also about the kinds of industries that are successful in Calabria. What are the kinds of spillovers - there are those 3 right?
-
-### Regional inequality on the rise in Italy?
-
-Look at North vs South line or map over time?
-
-```{r}
-knitr::include_graphics(here::here("figures", "industry_employment_share__map.jpeg"))
-```
-
-```{r}
-knitr::include_graphics(here::here("figures", "sectoral_employment_shares__stacked_area.jpeg"))
-```
-
-
-## Other information
-
-Financial Times article:
-
-(https://www.ft.com/content/55cb175d-9a0a-4c05-b358-ca39fa365ceb)
-
-"The worst affected are those living in the country’s south, in particular the most vulnerable, those living on the outskirts of cities and in rural areas and those engaged in Italy’s vast informal and undocumented economy" 
-
-## Crux
-
-Problem - wage setting determined by the North but lower marginal productivity means that the unemployment rate is higher in the South - see Enrico Moretti on this.
-
-@boeri_wage_2019 Says that this is a problem.
-
-
-# Policy brief
-
-The previous two sections have shown that Calabria has missed the boat with regard to diverting a large share of the workforce into high skilled manufacturing. The North has already diversified out of manufacturing for the most part and into services. Hence, Calabria and the South should focus on the comparative advantages that it does possess in order to capitalize on the services based economy of the future. Specifically, the mediteranean climate and relatively large share of land devoted to agriculture such as olives and citrus plantations mean that it is primed to become a larger tourist destination. In order to facilitate an increase in tourism, policy makers should take a three pronged approach. First, in order to incentivize carbon-consious travellers to make it further South along the boot of Italy, Calabria should investigate in improving the over-night rail connections between the hubs of Milan and Rome and the South. 
-
-
-
-
-
-
-
+The previous sections have shown that Calabria has missed the boat with regard to diverting a large share of the workforce into high skilled manufacturing. The North has already diversified out of manufacturing for the most part and into services. Hence, Calabria and the South should focus on the comparative advantages that it does possess in order to capitalize on the services based economy of the future. Specifically, the mediteranean climate and relatively large share of land devoted to agriculture such as olives and citrus plantations mean that it is primed to become a larger tourist destination. In order to facilitate an increase in tourism, policy makers should take a three pronged approach. First, in order to incentivize carbon-consious travellers to make it further South along the boot of Italy, Calabria should investigate in improving the over-night rail connections between the hubs of Milan and Rome and the South. 
 
 # Tool for visualizing the Roses and Wolf database on Regional Development in Europe.
 
-I have built a tool to visualize the data that I made use of in this essay - as well as a bunch more. It is an interactive web app [available here](https://jonathan-jayes.shinyapps.io/Roses-Wolf-database-on-regional-GDP/).
+I have built a tool to visualize the data that I made use of in this essay - as well as a some more. It is an interactive web app [available here](https://jonathan-jayes.shinyapps.io/Roses-Wolf-database-on-regional-GDP/).
 
-It looks like this: 
+The interface looks like this: 
 
 ```{r}
 knitr::include_graphics(here::here("images", "roses-wolf-tool.PNG"))
 ```
 
-You can see a stacked column chart depicting the sectoral shares of employment, a line chart of regional GDP and regional population compared to the national level, as well as a map that gives context on sectoral shares of employment in the surrounding regions.
+You can see a stacked column chart depicting the sectoral shares of employment, a line chart of regional GDP and regional population compared to the national level, as well as a map that gives context on sectoral shares of employment in the surrounding regions. It responds to a click on each NUTS2 region and provides 
 
 
 # Works cited

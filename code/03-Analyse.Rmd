@@ -8,6 +8,12 @@ output: html_document
 ```{r}
 library(tidyverse)
 theme_set(theme_light())
+theme_update(
+  # legend.position = "bottom",
+  text = element_text(size = 14),
+  legend.text = element_text(size = 14),
+  plot.caption = element_text(size = 12)
+)
 library(sf)
 ```
 
@@ -38,7 +44,7 @@ df %>%
 ## Regional GDP per capita
 
 ```{r}
-jpeg(here::here("figures", "regional_gdp_per_capita__line.jpeg"), width = 8, height = 6, units = "in", res = 1000)
+jpeg(here::here("figures", "regional_gdp_per_capita__line_1.jpeg"), width = 6, height = 4, units = "in", res = 1000)
 
 df %>%
   filter(
@@ -91,7 +97,7 @@ df %>%
 ## Sectoral Employment Shares
 
 ```{r}
-jpeg(here::here("figures", "sectoral_employment_shares__stacked_area.jpeg"), width = 8, height = 6, units = "in", res = 1000)
+jpeg(here::here("figures", "sectoral_employment_shares__stacked_area_1.jpeg"), width = 8, height = 6, units = "in", res = 1000)
 
 df %>% 
   filter(series %in% c("Agric. share of employment",
