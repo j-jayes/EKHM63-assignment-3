@@ -91,6 +91,8 @@ df %>%
 ## Sectoral Employment Shares
 
 ```{r}
+jpeg(here::here("figures", "sectoral_employment_shares__stacked_area.jpeg"), width = 8, height = 6, units = "in", res = 1000)
+
 df %>% 
   filter(series %in% c("Agric. share of employment",
                      "Industry share of employment",
@@ -115,12 +117,16 @@ df %>%
   labs(x = NULL,
        y = "Sectoral share of employment",
        fill = NULL)
+
+dev.off()
 ```
 
 
 ## Industry employment share
 
 ```{r}
+jpeg(here::here("figures", "industry_employment_share__map.jpeg"), width = 8, height = 6, units = "in", res = 1000)
+
 
 df %>%
   filter(
@@ -152,10 +158,150 @@ df %>%
     y = NULL
   )
 
-
+dev.off()
 ```
+
+## Agric shares
+
+```{r}
+
+jpeg(here::here("figures", "agric_employment_share__map_europe.jpeg"), width = 8, height = 6, units = "in", res = 1000)
+
+df %>%
+  filter(
+    series == "Agric. share of employment",
+    # country_current_borders == "Italy",
+    year %in% c(1990, 2000, 2010, 2015)
+  ) %>%
+  mutate(name = case_when(
+    # region == "Lombardia" ~ "Lombardia",
+    region == "Calabria" ~ "Calabria",
+    TRUE ~ ""
+  )) %>%
+  inner_join(map_simple) %>%
+  ggplot(aes(geometry = geometry, fill = value)) +
+  geom_sf() +
+  geom_sf_text(aes(label = name), nudge_x = 7) +
+  facet_wrap(~year) +
+  theme(
+    panel.grid = element_blank(),
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    legend.position = "bottom"
+  ) +
+  guides(fill = guide_colorbar(barwidth = 15, barheight = .5, title.position = "top", title.hjust = .5)) +
+  scale_fill_gradient2(low = "midnightblue", high = "red", mid = "pink", midpoint = 20, labels = scales::percent_format(scale = 1)) +
+  labs(
+    fill = "Share of employment in agriculture",
+    x = NULL,
+    y = NULL
+  )
+
+dev.off()
+```
+
+
+Population or population growth?
+
+```{r}
+jpeg(here::here("figures", "population_growth__line.jpeg"), width = 8, height = 6, units = "in", res = 1000)
+
+df %>% 
+  filter(country_current_borders == "Italy",
+         series == "Population") %>%
+  group_by(region) %>% 
+  mutate(delta = (value - lag(value))/lag(value)) %>%
+  ungroup() %>% 
+  filter(year != 1900) %>% 
+  ggplot(aes(year, delta, colour = region)) +
+  geom_point() +
+  geom_line()  +
+  geom_hline(yintercept = 0, lty = 2) +
+  gghighlight(region %in% c("Calabria", "Lombardia")) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  scale_colour_brewer(palette = "Dark2") +
+  labs(x = NULL,
+       y = "Population growth rate")
+
+dev.off()
+```
+
 
 ```{r}
 df %>% distinct(series)
+```
+
+
+```{r}
+
+
+df_unemp <- read.csv(here::here("data", "italy-unemployment.csv")) %>% 
+  as_tibble() %>% janitor::clean_names()
+
+jpeg(here::here("figures", "unemployment_region__line.jpeg"), width = 8, height = 6, units = "in", res = 1000)
+
+df_unemp %>% 
+  ggplot(aes(time, value, colour = geo)) +
+  geom_point() +
+  geom_line()  +
+  gghighlight(geo %in% c("Calabria", "Lombardia", "Italy")) +
+  scale_y_continuous(labels = scales::percent_format(scale = 1, accuracy = 1)) +
+  scale_x_continuous(labels = scales::number_format(scale = 1, accuracy = 1, big.mark = "")) +
+  scale_colour_brewer(palette = "Dark2") +
+  labs(x = NULL,
+       y = "Unemployment rate")
+
+dev.off()
+```
+
+
+
+```{r}
+# install.packages("datapasta")
+library(datapasta)
+
+# datapasta::tribble_paste()
+df_tourism <- tibble::tribble(
+     ~V1,                            ~V2,          ~V3,
+      1L,                       "Veneto", "69.229.094",
+      2L, "Trentino-Alto Adige/Südtirol", "47.618.085",
+      3L,                      "Tuscany", "41.152.681",
+      4L,               "Emilia-Romagna", "40.647.799",
+      5L,                     "Lombardy", "39.115.354",
+      6L,                        "Lazio", "36.684.847",
+      7L,                     "Campania", "21.689.412",
+      8L,                       "Apulia", "15.197.186",
+      9L,                      "Liguria", "15.183.243",
+     10L,                       "Sicily", "15.135.259",
+     11L,                     "Piedmont", "15.100.768",
+     12L,                     "Sardinia", "14.940.111",
+     13L,                       "Marche",  "9.656.538",
+     14L,                     "Calabria",  "9.212.630",
+     15L,        "Friuli-Venezia Giulia",  "9.022.550",
+     16L,                      "Abruzzo",  "6.193.473",
+     17L,                       "Umbria",  "6.081.647",
+     18L,                 "Aosta Valley",  "3.606.308",
+     19L,                   "Basilicata",  "2.603.624",
+     20L,                       "Molise",    "482.051"
+     ) %>% 
+  rename(row = V1, region = V2, n_nights = V3) %>% 
+  select(-row) %>% 
+  mutate(n_nights = str_remove_all(n_nights, "\\."),
+         n_nights = parse_number(n_nights))
+
+jpeg(here::here("figures", "tourism__col.jpeg"), width = 8, height = 6, units = "in", res = 1000)
+
+df_tourism %>% 
+  mutate(region = fct_reorder(region, n_nights)) %>% 
+  ggplot(aes(n_nights, region, fill = region)) +
+  geom_col() +
+  gghighlight(region == "Calabria") +
+  theme(legend.position = "none") +
+  scale_fill_brewer(palette = "Dark2") +
+  scale_x_continuous(labels = scales::number_format()) +
+  labs(x = "Number of nights spent by tourists in 2018",
+       y = NULL) 
+
+dev.off()
 ```
 
